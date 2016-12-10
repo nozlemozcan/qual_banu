@@ -1,0 +1,15 @@
+1- NB_nostem_type1
+
+"C:\Program Files (x86)\Python35-32\python.exe" E:/doktora/yeterlilik/TAKEHOME/Banu/code/my_naive_bayes/my_naive_bayes.py 0 1 E:\doktora\yeterlilik\TAKEHOME\Banu\code\dataset E:\doktora\yeterlilik\TAKEHOME\Banu\code\out E:\doktora\yeterlilik\TAKEHOME\Banu\code\my_out_frequent_words.txt
+
+2- NB_stem_type1
+
+"C:\Program Files (x86)\Python35-32\python.exe" E:/doktora/yeterlilik/TAKEHOME/Banu/code/my_naive_bayes/my_naive_bayes.py 1 1 E:\doktora\yeterlilik\TAKEHOME\Banu\code\dataset E:\doktora\yeterlilik\TAKEHOME\Banu\code\out E:\doktora\yeterlilik\TAKEHOME\Banu\code\my_out_frequent_words.txt
+
+3- NB_nostem_type2
+
+"C:\Program Files (x86)\Python35-32\python.exe" E:/doktora/yeterlilik/TAKEHOME/Banu/code/my_naive_bayes/my_naive_bayes.py 0 2 E:\doktora\yeterlilik\TAKEHOME\Banu\code\dataset E:\doktora\yeterlilik\TAKEHOME\Banu\code\out E:\doktora\yeterlilik\TAKEHOME\Banu\code\my_out_frequent_words.txt
+
+4- NB_stem_type2
+
+"C:\Program Files (x86)\Python35-32\python.exe" E:/doktora/yeterlilik/TAKEHOME/Banu/code/my_naive_bayes/my_naive_bayes.py 1 2 E:\doktora\yeterlilik\TAKEHOME\Banu\code\dataset E:\doktora\yeterlilik\TAKEHOME\Banu\code\out E:\doktora\yeterlilik\TAKEHOME\Banu\code\my_out_frequent_words.txt
