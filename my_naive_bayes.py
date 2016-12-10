@@ -331,9 +331,9 @@ def main():
         output_folder = sys.argv[4]
         fw_filename = sys.argv[5]
 
+        function_words = []
         if featureset_type == '2':
             print("fw")
-            function_words = []
             with open(fw_filename, 'r', encoding='windows-1254') as current_opened_file:
                 function_words  = current_opened_file.readlines()
             current_opened_file.close()
