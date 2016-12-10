@@ -127,22 +127,7 @@ def my_read_input(input_main_folder,stem_flag):
     return train_input_split_list, train_input_class_list, test_input_split_list, test_input_class_list, words, class_list
 
 
-def my_convert_to_bow(input_split_list, words):
-    my_print("my_convert_to_bow")
-
-    input_bow_list = []
-
-    for f in range(10):
-        curr_words = words[f]
-        curr_sample_list = input_split_list[f]
-        new_sample_list = [w for w in curr_sample_list if w in curr_words]
-        curr_sample_counts = Counter(new_sample_list)
-        input_bow_list.append(curr_sample_counts)
-
-    return input_bow_list
-
-
-def my_apply_NB(trainset,trainset_class_list,testset,words,classes):
+def my_apply_NB(trainset,trainset_class_list,testset,words,classes,featureset_type,function_words):
     print("my_apply_NB")
 
     prediction_list = []
@@ -163,6 +148,12 @@ def my_apply_NB(trainset,trainset_class_list,testset,words,classes):
 
         for curr_train_token in curr_train_sample:
             word_class_counts[curr_train_token, curr_class] += 1
+            if featureset_type == '2':  # add function words
+                if curr_train_token in function_words:
+                    fw = "fw_"+curr_train_token
+                    word_class_counts[fw, curr_class] += 1
+                    if fw not in words:
+                        words.append(fw)
 
     # find word and class frequencies in log form
     class_frequencies = {}
@@ -195,6 +186,14 @@ def my_apply_NB(trainset,trainset_class_list,testset,words,classes):
                     if wcf == 0:
                         wcf = default_word_class_frequency[c2]
                     test_class_probabilities[c2] += wcf
+                    if featureset_type == '2':  # add function words
+                        if curr_test_token in function_words:
+                            fw = "fw_"+curr_test_token
+                            for c21 in classes:
+                                wcf2 = word_class_frequencies[fw, c21]
+                                if wcf2 == 0:
+                                    wcf2 = default_word_class_frequency[c21]
+                                test_class_probabilities[c21] += wcf2
         for c3 in classes:
             test_class_probabilities[c3] += class_frequencies[c3]
             test_class_probabilities[c3] = round(test_class_probabilities[c3],4)
@@ -327,17 +326,21 @@ def main():
         main_exception_message = 'HOHOHO'
 
         stem_flag = sys.argv[1]
-        featureset_type = sys.argv[2]  # 1:bow 2:tf-idf ??
+        featureset_type = sys.argv[2]  # 1:bow 2:bow+fw
         input_main_folder = sys.argv[3]
         output_folder = sys.argv[4]
+        fw_filename = sys.argv[5]
+
+        if featureset_type == '2':
+            print("fw")
+            function_words = []
+            with open(fw_filename, 'r', encoding='windows-1254') as current_opened_file:
+                function_words  = current_opened_file.readlines()
+            current_opened_file.close()
+            function_words = [w.replace("\n","") for w in function_words]
 
         # parse input file and break into 10 folds train - test pairs
         [train_input_split_list, train_input_class_list,test_input_split_list, test_input_class_list, words, classes] = my_read_input(input_main_folder,stem_flag)
-        # convert word lists to featureset
-        if featureset_type == '1':
-            train_input_bow_list = my_convert_to_bow(train_input_split_list, words)
-            test_input_bow_list = my_convert_to_bow(test_input_split_list, words)
-
 
         # Naive Bayes
         cm_list = []
@@ -349,7 +352,7 @@ def main():
             curr_testset_class_list = test_input_class_list[f]
             curr_words = words[f]
 
-            curr_prediction_list = my_apply_NB(curr_trainset,curr_trainset_class_list,curr_testset,curr_words,classes)
+            curr_prediction_list = my_apply_NB(curr_trainset,curr_trainset_class_list,curr_testset,curr_words,classes,featureset_type,function_words)
             [curr_accuracy, curr_cm] = my_evaluate_test(curr_testset_class_list,curr_prediction_list)
             accuracy_list.append(curr_accuracy)
             cm_list.append(curr_cm)
